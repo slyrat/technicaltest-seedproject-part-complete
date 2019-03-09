@@ -4,6 +4,7 @@ import mockData from "../../../public/db.json";
 describe("filter", () => {
   let store;
 
+  // Note: I know the length checks aren't the best checks
   beforeEach(() => {
     store = new Store();
     store.setDeals(mockData.deals);
@@ -62,8 +63,19 @@ describe("filter", () => {
     });
   });
 
-  
+  describe("provider filters", () => {
+    it("should show only one deal when filtering by sky", () => {
+      // Arrange
+      store.setProviderFilter("sky");
 
+      // Act
+      const result = store.deals;
+
+      // Assert
+      expect(result).toHaveLength(1);
+    });
+  });
+  
   describe("alternate filter names", () => {
     it("should return broadband for fibre broadband filter", () => {
       // Arrange

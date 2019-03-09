@@ -34,36 +34,55 @@ class Store extends Observable {
 
   filter() {
     return this.state.deals.filter((value) => {
+      let productTypeFilter = true;
+      let providerFilter = true;
+
       if (value.productTypes) {
-        let allTypesInFilter = true;
-        let allFiltersInTypes = true;
-        if (this.state.productFilters &&
-            this.state.productFilters.length) {
-          // check that each type has a filter match
-          value.productTypes.forEach((type) => {
-            if (this.ignoredProducts.includes(type.toLowerCase())) {
-              return;
-            }
-            if (!this.state.productFilters.includes(this.alternateFilterName(type.toLowerCase()))) {
-              allTypesInFilter = false;
-              return;
-            }
-          });
-          // check that each filter has a type match
-          this.state.productFilters.forEach((filter) => {
-            if (!value.productTypes.filter((type) => {
-              return type.toLowerCase() === filter ||
-                    type.toLowerCase() === this.alternateTypeName(filter);
-            }).length) {
-              allFiltersInTypes = false;
-              return;
-            }
-          });
-        }
-        return allTypesInFilter && allFiltersInTypes;
+        productTypeFilter = this.filterByProductTypes(value);
       }
-      return true;
+      if (value.provider) {
+        providerFilter = this.filterByProvider(value);
+      }
+
+      return productTypeFilter && providerFilter;
     });
+  }
+
+  filterByProvider(value) {
+    if (this.state.providerFilter) {
+      return value.provider.name.toLowerCase() === this.state.providerFilter;
+    }
+
+    return true;
+  }
+
+  filterByProductTypes(value) {
+    let allTypesInFilter = true;
+    let allFiltersInTypes = true;
+    if (this.state.productFilters &&
+        this.state.productFilters.length) {
+      // check that each type has a filter match
+      value.productTypes.forEach((type) => {
+        if (this.ignoredProducts.includes(type.toLowerCase())) {
+          return;
+        }
+        if (!this.state.productFilters.includes(this.alternateFilterName(type.toLowerCase()))) {
+          allTypesInFilter = false;
+          return;
+        }
+      });
+      // check that each filter has a type match
+      this.state.productFilters.forEach((filter) => {
+        if (!value.productTypes.filter((type) => {
+          return type.toLowerCase() === filter ||
+                type.toLowerCase() === this.alternateTypeName(filter);
+        }).length) {
+          allFiltersInTypes = false;
+          return;
+        }
+      });
+    }
+    return allTypesInFilter && allFiltersInTypes;
   }
 
   setDeals(data) {
