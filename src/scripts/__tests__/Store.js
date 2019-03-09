@@ -63,16 +63,41 @@ describe("filter", () => {
     });
   });
 
+  describe("tv filters", () => {
+    it("should show no deals when only filtering by tv", () => {
+      // Arrange
+      store.setProductFilter("tv");
+
+      // Act
+      const result = store.deals;
+  
+      // Assert
+      expect(result).toHaveLength(0);
+    });
+  });
   describe("provider filters", () => {
     it("should show only one deal when filtering by sky", () => {
       // Arrange
-      store.setProviderFilter("sky");
+      store.setProviderFilter(1);
 
       // Act
       const result = store.deals;
 
       // Assert
       expect(result).toHaveLength(1);
+    });
+
+    it("should show 2 deals when filtering by bt (id 3), broadband, and tv", () => {
+      // Arrange
+      store.setProductFilter("tv");
+      store.setProductFilter("broadband");
+      store.setProviderFilter(3);
+
+      // Act
+      const result = store.deals;
+
+      // Assert
+      expect(result).toHaveLength(2);
     });
   });
   

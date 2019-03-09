@@ -1,5 +1,6 @@
 class Template {
   constructor() {
+    this.nodeals = document.getElementById("template-no-deal").innerHTML;
     this.deal = document.getElementById("template-deal").innerHTML;
     this.listItem = document.getElementById("template-list-item").innerHTML;
     this.icon = document.getElementById("template-icon").innerHTML;
@@ -34,6 +35,9 @@ class Template {
   }
 
   buildDealList(list) {
+    if (!list || list.length === 0) {
+      return this.nodeals;
+    }
     return list.reduce((result, deal) => {
       const dealHtml = this.buildDeal(deal);
       return (result += this.buildListItem(dealHtml));

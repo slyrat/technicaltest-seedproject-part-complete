@@ -6,7 +6,7 @@ class ViewDeals {
   }
 
   render(data) {
-    if (this.dealList && data.length) {
+    if (this.dealList) {
       const htmlToAppend = this.template.buildDealList(data);
       this.dealList.innerHTML = htmlToAppend;
     }

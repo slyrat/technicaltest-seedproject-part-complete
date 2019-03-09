@@ -49,8 +49,8 @@ class Store extends Observable {
   }
 
   filterByProvider(value) {
-    if (this.state.providerFilter) {
-      return value.provider.name.toLowerCase() === this.state.providerFilter;
+    if (this.state.providerFilter != null) {
+      return value.provider.id === this.state.providerFilter;
     }
 
     return true;
