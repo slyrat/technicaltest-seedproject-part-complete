@@ -22,7 +22,7 @@ module.exports = {
       open: true,
       contentBase: distPath,
       host: "localhost",
-      port: 5000
+      port: 4000
     }),
     rollupPluginLiveReload({
       watch: distPath
