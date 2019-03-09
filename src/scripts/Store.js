@@ -25,12 +25,21 @@ class Store extends Observable {
     return filter;
   }
 
+  alternateTypeName(type) {
+    if (type.toLowerCase() === "broadband") {
+      return "fibre broadband";
+    }
+    return type;
+  }
+
   filter() {
     return this.state.deals.filter((value) => {
       if (value.productTypes) {
         let allTypesInFilter = true;
+        let allFiltersInTypes = true;
         if (this.state.productFilters &&
             this.state.productFilters.length) {
+          // check that each type has a filter match
           value.productTypes.forEach((type) => {
             if (this.ignoredProducts.includes(type.toLowerCase())) {
               return;
@@ -40,8 +49,18 @@ class Store extends Observable {
               return;
             }
           });
+          // check that each filter has a type match
+          this.state.productFilters.forEach((filter) => {
+            if (!value.productTypes.filter((type) => {
+              return type.toLowerCase() === filter ||
+                    type.toLowerCase() === this.alternateTypeName(filter);
+            }).length) {
+              allFiltersInTypes = false;
+              return;
+            }
+          });
         }
-        return allTypesInFilter;
+        return allTypesInFilter && allFiltersInTypes;
       }
       return true;
     });

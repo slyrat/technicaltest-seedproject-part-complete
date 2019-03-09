@@ -36,7 +36,33 @@ describe("filter", () => {
       // Assert
       expect(result).toHaveLength(4);
     });
+
+    it("should show the 4 broadband and tv only deals when broadband and tv are the only filters applied", () => {
+      // Arrange
+      store.setProductFilter("broadband");
+      store.setProductFilter("tv");
+
+      // Act
+      const result = store.deals;
+  
+      // Assert
+      expect(result).toHaveLength(4);
+    });
+
+    it("should show the 1 broadband and mobile only deals when broadband and mobile are the only filters applied", () => {
+      // Arrange
+      store.setProductFilter("broadband");
+      store.setProductFilter("mobile");
+
+      // Act
+      const result = store.deals;
+  
+      // Assert
+      expect(result).toHaveLength(1);
+    });
   });
+
+  
 
   describe("alternate filter names", () => {
     it("should return broadband for fibre broadband filter", () => {
@@ -52,6 +78,26 @@ describe("filter", () => {
       // Arrange
       // Act
       const name = store.alternateFilterName("test");
+      
+      // Assert
+      expect(name).toEqual("test");
+    });
+  });
+
+  describe("alternate type names", () => {
+    it("should return fibre broadband for broadband", () => {
+      // Arrange
+      // Act
+      const type = store.alternateTypeName("broadband");
+      
+      // Assert
+      expect(type).toEqual("fibre broadband");
+    });
+
+    it("should return the type as is for non broadband", () => {
+      // Arrange
+      // Act
+      const name = store.alternateTypeName("test");
       
       // Assert
       expect(name).toEqual("test");
