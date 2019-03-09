@@ -14,8 +14,37 @@ class Store extends Observable {
     return this.filter();
   }
 
+  get ignoredProducts() {
+    return ["phone"];
+  };
+
+  alternateFilterName(filter) {
+    if (filter.toLowerCase() === "fibre broadband") {
+      return "broadband";
+    }
+    return filter;
+  }
+
   filter() {
-    return this.state.deals;
+    return this.state.deals.filter((value) => {
+      if (value.productTypes) {
+        let allTypesInFilter = true;
+        if (this.state.productFilters &&
+            this.state.productFilters.length) {
+          value.productTypes.forEach((type) => {
+            if (this.ignoredProducts.includes(type.toLowerCase())) {
+              return;
+            }
+            if (!this.state.productFilters.includes(this.alternateFilterName(type.toLowerCase()))) {
+              allTypesInFilter = false;
+              return;
+            }
+          });
+        }
+        return allTypesInFilter;
+      }
+      return true;
+    });
   }
 
   setDeals(data) {
